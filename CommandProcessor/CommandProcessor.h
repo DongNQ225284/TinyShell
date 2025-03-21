@@ -8,7 +8,7 @@
 #include "FileManager.h"
 #include "ProcessManager.h"
 
-class CommandProcessor {
+class CommandProcess {
 public:
     static void executeCommand(const std::string& input);
     
