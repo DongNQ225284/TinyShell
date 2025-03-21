@@ -1,6 +1,7 @@
 #include "ProcessManager.h"
 
-bool ProcessManager::runProcess(const string& command, bool isBackground) {
+bool ProcessManager::runProcess(const std::string& command, bool isBackground) {
+    
     return true;
 }
 

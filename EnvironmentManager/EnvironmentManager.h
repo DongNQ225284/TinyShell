@@ -5,15 +5,13 @@
 #include <string>
 #include <windows.h>
 
-using namespace std;
-
 class EnvironmentManager {
 public:
     static void printWorkingDirectory();
-    static void changeDirectory(const string& path);
+    static void changeDirectory(const std::string& path);
     static void listEnvironmentVariables();
-    static void setEnvironmentVariable(const string& name, const string& value);
-    static void unsetEnvironmentVariable(const string& name); 
+    static void setEnvironmentVariable(const std::string& name, const std::string& value);
+    static void unsetEnvironmentVariable(const std::string& name); 
 };
 
 #endif

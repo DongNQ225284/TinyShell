@@ -6,13 +6,11 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 class ProcessManager {
 private:
-    vector<PROCESS_INFORMATION> processes;
+    std::vector<PROCESS_INFORMATION> processes;
 public:
-    bool runProcess(const string& command, bool isBackground); 
+    bool runProcess(const std::string& command, bool isBackground); 
     void listProcesses(); 
     bool killProcess(DWORD pid); 
     void killAll();

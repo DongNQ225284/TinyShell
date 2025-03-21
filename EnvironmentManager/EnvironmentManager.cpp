@@ -1,7 +1,5 @@
 #include "EnvironmentManager.h"
 
-using namespace std;
-
 void EnvironmentManager::printWorkingDirectory() {
 
 }

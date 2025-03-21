@@ -1,30 +1,27 @@
 #include "FileManager.h"
 
-using namespace std;
-
-
-void FileManager::listFiles(const string& path) {
+void FileManager::listFiles(const std::string& path) {
     
 }
 
-bool FileManager::makeDir(const string& path) {
+bool FileManager::makeDir(const std::string& path) {
     
 }
 
-bool FileManager::removeDir(const string& path) {
+bool FileManager::removeDir(const std::string& path) {
     
 }
 
 
-bool FileManager::copyFile(const string& src, const string& dest) {
+bool FileManager::copyFile(const std::string& src, const std::string& dest) {
     
 }
 
-bool FileManager::moveFile(const string& src, const string& dest) {
+bool FileManager::moveFile(const std::string& src, const std::string& dest) {
     
 }
 
-bool FileManager::deleteFile(const string& path) {
+bool FileManager::deleteFile(const std::string& path) {
     
 }
 
@@ -32,6 +29,6 @@ void FileManager::printWorkingDirectory() {
     
 }
 
-bool FileManager::changeDirectory(const string& path) {
+bool FileManager::changeDirectory(const std::string& path) {
     
 }

@@ -8,12 +8,12 @@
 #include "FileManager.h"
 #include "ProcessManager.h"
 
-class CommandProcess {
+class CommandProcessor {
 public:
-    static void executeCommand(const std::string& input);
+    void executeCommand(const std::string& input);
     
 private:
-    static void parseCommand(const std::string& input, std::vector<std::string>& args);
+    void parseCommand(const std::string& input, std::vector<std::string>& args);
 };
 
 #endif

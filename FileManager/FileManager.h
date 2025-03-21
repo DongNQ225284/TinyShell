@@ -4,18 +4,17 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
-using namespace std;
 
 class FileManager {
 public:
-    static void listFiles(const string& path = ".");
-    static bool makeDir(const string& path);
-    static bool removeDir(const string& path);
-    static bool copyFile(const string& src, const string& dest);
-    static bool moveFile(const string& src, const string& dest);
-    static bool deleteFile(const string& path);
+    static void listFiles(const std::string& path = ".");
+    static bool makeDir(const std::string& path);
+    static bool removeDir(const std::string& path);
+    static bool copyFile(const std::string& src, const std::string& dest);
+    static bool moveFile(const std::string& src, const std::string& dest);
+    static bool deleteFile(const std::string& path);
     static void printWorkingDirectory();
-    static bool changeDirectory(const string& path);
+    static bool changeDirectory(const std::string& path);
 };
 
 #endif

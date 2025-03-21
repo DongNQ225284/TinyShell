@@ -1,22 +1,20 @@
 #include "CommandProcessor.h"
-
-using namespace std;
-
-void CommandProcess::parseCommand(const string& input, vector<string>& args) {
-    istringstream iss(input);
-    string word;
+#include <sstream>
+void CommandProcessor::parseCommand(const std::string& input, std::vector<std::string>& args) {
+    std::istringstream iss(input);
+    std::string word;
     while (iss >> word) {
         args.push_back(word);
     }
 }
 
-void CommandProcess::executeCommand(const string& input) {
-    vector<string> args;
+void CommandProcessor::executeCommand(const std::string& input) {
+    std::vector<std::string> args;
     parseCommand(input, args);
 
     if (args.empty()) return; // Không có lệnh
 
-    string command = args[0];
+    std::string command = args[0];
 
     if (command == "exit") {
 
@@ -52,6 +50,6 @@ void CommandProcess::executeCommand(const string& input) {
 
     } 
     else {
-        cout << "Command not found: " << command << endl;
+        std::cout << "Command not found: " << command << std::endl;
     }
 }
