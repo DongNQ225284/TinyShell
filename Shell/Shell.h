@@ -1,7 +1,7 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#include "CommandProcessor.h"
+#include "../CommandProcessor/CommandProcessor.h"
 #include <iostream>
 #include <vector>
 #include <string>

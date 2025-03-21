@@ -5,14 +5,12 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "FileManager.h"
-#include "ProcessManager.h"
+#include "../FileManager/FileManager.h"
+#include "../ProcessManager/ProcessManager.h"
 
 class CommandProcessor {
 public:
     void executeCommand(const std::string& input);
-    
-private:
     void parseCommand(const std::string& input, std::vector<std::string>& args);
 };
 
