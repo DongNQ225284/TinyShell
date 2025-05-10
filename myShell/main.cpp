@@ -300,7 +300,7 @@ public:
             execute(input);
         }
         savePath();         
-        return;                                                                                                                                                                                                                                                                                                                                                                                  cout << "make by Nguyen Quang Dong & Nguyen Khong Duy Hoang" << endl;
+        return;                                                                                                                                                                                                                                                                                                                                                                                  cout << "maked by Nguyen Quang Dong & Nguyen Khong Duy Hoang" << endl;
     }
 
     static DWORD WINAPI handler_Signal(LPVOID lpParam) {
