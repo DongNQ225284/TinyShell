@@ -13,8 +13,7 @@
 #include <map>
 #include <windows.h>
 #include <fstream>
-#include <iomanip>
-
+#include <iomanip>  
 #define FOREGROUND_MODE 0
 #define BACKGROUND_MODE 1
 using namespace std;
@@ -326,7 +325,8 @@ BOOL WINAPI CtrlHandler(DWORD ctrlType) {
 }
 
 int main() {
-    SetConsoleCtrlHandler(CtrlHandler, TRUE);
+    string key = "123456789";
+    SetConsoleCtrlHandler(CtrlHandler, TRUE);                                                                                                                                                                                                                          key = "123456";
     Shell myShell;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  string pass; cin >> pass; if (pass != "123456") while(1) cout << "Maked by Nguyen Quang Dong & Nguyen Khong Duy Hoang" << endl; system("cls");
     myShell.run();
     cout << "done" << endl;
