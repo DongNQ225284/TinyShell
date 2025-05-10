@@ -82,7 +82,7 @@ private:
                 return;
             } else if (args[0] == "history") {
                 if (processes.empty()) {
-                    cout << "No processes are running" << endl;
+                    cout << "(empty)" << endl;
                     return;
                 }
                 vector<int> space = {20, 20, 20, 20, 20};
@@ -155,14 +155,13 @@ private:
                 //  //TODO --> tham khao (args[0] == "history")
                 //}
             }
-            //tạo tiến trình mới
-            //chưa xử lý file .bat
-            //file .bat chứa nhiều câu lệnh liên tiếp cần thực thi -> dùng vector<vector<string>> list_cmd để lưu
+            list_cmd.clear();
+            //Xử lý file .bat
             //Nếu là file .bat
             //   Thực hiện đọc file .bat theo line, chuyển đổi line sang câu lệnh arg bằng hàm parase_cmd(line)
             //   list_cmd.push_back(arg)
             //Không thì list_cmd.push_back(args)
-
+            list_cmd.push_back(args);
             for (int i = 0; i < list_cmd.size(); i++) {
                 PROCESS_INFORMATION pi;    
                 if (newProcess(list_cmd[i], pi)) {
