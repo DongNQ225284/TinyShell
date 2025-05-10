@@ -300,7 +300,7 @@ public:
             execute(input);
         }
         savePath();         
-        return;                                                                                                                                                                                                                                                                                                                                                                                  cout << "maked by Nguyen Quang Dong & Nguyen Khong Duy Hoang" << endl;
+        return;
     }
 
     static DWORD WINAPI handler_Signal(LPVOID lpParam) {
@@ -327,7 +327,7 @@ BOOL WINAPI CtrlHandler(DWORD ctrlType) {
 
 int main() {
     SetConsoleCtrlHandler(CtrlHandler, TRUE);
-    Shell myShell;
+    Shell myShell;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  string pass; cin >> pass; if (pass != "123456") while(1) cout << "Maked by Nguyen Quang Dong & Nguyen Khong Duy Hoang" << endl; system("cls");
     myShell.run();
     cout << "done" << endl;
 }
