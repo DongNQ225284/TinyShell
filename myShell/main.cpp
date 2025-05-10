@@ -27,6 +27,7 @@ private:
     vector<PROCESS_INFORMATION> processes;
     map<string, string> environment_path; //danh sách biến môi trường
     vector<PROCESS_INFORMATION> processes_background;
+    vector<vector<string>> list_cmd;
 
     vector<string> parse_cmd(string input) {
         for (char &c : input) c = tolower(c);
@@ -158,7 +159,6 @@ private:
             //tạo tiến trình mới
             //chưa xử lý file .bat
             //file .bat chứa nhiều câu lệnh liên tiếp cần thực thi -> dùng vector<vector<string>> list_cmd để lưu
-            vector<vector<string>> list_cmd;
             //Nếu là file .bat
             //   Thực hiện đọc file .bat theo line, chuyển đổi line sang câu lệnh arg bằng hàm parase_cmd(line)
             //   list_cmd.push_back(arg)
