@@ -183,7 +183,7 @@ private:
             }
             return;
         } else { 
-            if (args[0] == "help") { //Hướng dẫn chi tiết hơn về các lệnh
+            if (args[0] == "help" && args.size() == 2) { //Hướng dẫn chi tiết hơn về các lệnh
                 if (args[1] == "path") {
                     cout << "PATH                     List all path\n"
                          << "PATH -a VARIABLE VALUE   Add new path\n"
@@ -195,7 +195,7 @@ private:
                     //kill id: kết thúc tiến trình id
                     //kill all: kết thúc tất cả các tiến trình background
                 } else {
-                    cerr << "Command not found! Try 'help path" << endl;
+                    cerr << "Command not found! Try 'help'" << endl;
                     return; 
                 }
             }
