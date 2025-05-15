@@ -92,9 +92,14 @@ private:
             string line;
             while (getline(file, line)) {                               
                 vector<string> cmd_line = parse_cmd(line);                  
-                list_cmd.push_back(cmd_line);                               
+                list_cmd.push_back(cmd_line);
+                cout << line << endl;                               
             }
             file.close();
+            printf("Do you want excute? [Y/n]: ");
+            string confirm;
+            getline(cin, confirm);
+            if (confirm.empty() || tolower(confirm[0]) != 'y') return;
         } else {                                                    
             list_cmd.push_back(cmd);                                    
         }
@@ -294,8 +299,9 @@ private:
                             environment_path[variable] = value;
                         } else {                                                                                    
                             printf("Value '%s' already exists, do you want to overwrite? [Y/n]: ", variable.c_str());
-                            char key; cin >> key;
-                            if (tolower(key) != 'y') return;
+                            string confirm;
+                            getline(cin, confirm);
+                            if (confirm.empty() || tolower(confirm[0]) != 'y') return;
 
                             environment_path[variable] = value;
                             return;
@@ -321,8 +327,9 @@ private:
                 else if (args[0] == "kill") {
                     if (args[1] == "all" && args.size() == 2) {                                                     
                         printf("Are you sure? [Y/n]: ");
-                        char key; cin >> key;
-                        if (tolower(key) != 'y') return;
+                        string confirm;
+                        getline(cin, confirm);
+                        if (confirm.empty() || tolower(confirm[0]) != 'y') return;
 
                         for (auto& pi : processes_background) {
                             TerminateProcess(pi.hProcess, 0);
@@ -338,8 +345,9 @@ private:
                         }                                                                                               
                         
                         printf("Are you sure? [Y/n]: ");
-                        char key; cin >> key;
-                        if (tolower(key) != 'y') return;
+                        string confirm;
+                        getline(cin, confirm);
+                        if (confirm.empty() || tolower(confirm[0]) != 'y') return;
                         
                         TerminateProcess(processes_background[k].hProcess, 0);                                        
                         processes_background.erase(processes_background.begin() + k);                                      
