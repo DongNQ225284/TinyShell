@@ -157,7 +157,7 @@ vector<string> result = {
 int main() {
     size_t index = 0;
     while (index < code.size()) {
-        Sleep(3);
+        _getch();
         cout << code[index++];
         cout.flush();
     }
