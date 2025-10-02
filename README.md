@@ -111,7 +111,7 @@ list              # Liệt kê các tiến trình đang chạy
 ```bash
 path                    # Liệt kê biến môi trường
 path -a VARIABLE VALUE  # Thêm biến
-path -d VARIABLE # Xóa biến:
+path -d VARIABLE        # Xóa biến:
 ```
 
 ## File cấu hình
