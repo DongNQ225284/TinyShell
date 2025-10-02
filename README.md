@@ -1,6 +1,6 @@
-# MyShell
+# TinyShell
 
-MyShell là một **command-line shell** được phát triển bằng **C++** trên nền tảng **Windows**. Shell này hỗ trợ thực thi các lệnh cơ bản, quản lý tiến trình foreground và background, cũng như quản lý biến môi trường.
+TinyShell là một **command-line shell** được phát triển bằng **C++** trên nền tảng **Windows**. Shell này hỗ trợ thực thi các lệnh cơ bản, quản lý tiến trình foreground và background, cũng như quản lý biến môi trường.
 
 ---
 
