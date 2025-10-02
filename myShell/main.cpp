@@ -12,11 +12,14 @@
 #include <windows.h>
 #include <fstream>
 #include <iomanip>  
+#include <TlHelp32.h>
+
 #define FOREGROUND_MODE 0
 #define BACKGROUND_MODE 1
+
+#define INT_MAX 2147483647
+
 using namespace std;
-
-
 
 static bool running;                                     //trạng thái của shell
 static bool type;                                        //FOREGROUND_MODE/BACKGROUND_MODE
@@ -30,6 +33,7 @@ static vector<string> name_process_background;
 
 class Shell {
 private:
+    volatile bool ownCtrlPressed = false;
     //phân tích lệnh
     vector<string> parse_cmd(string input, bool lower = true) {
         for (char &c : input) c = tolower(c);
@@ -47,11 +51,11 @@ private:
         }
         STARTUPINFOA si = { sizeof(si) };
         char cmd[1024];
-        strcpy_s(cmd, cmdLine.c_str());
+        strcpy(cmd, cmdLine.c_str());
         if (!CreateProcess(NULL, cmd, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {                        
             for (auto val : environment_path) {                                                                                 
                 string fullPath = val.second + "\\" + args[0];                                                                  
-                strcpy_s(cmd, fullPath.c_str());                                                                                
+                strcpy(cmd, fullPath.c_str());                                                                                
                 if (CreateProcess(NULL, cmd, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {                        
                     return true;                                                                                                    
                     break;
@@ -76,6 +80,52 @@ private:
         } catch (const std::out_of_range& e) {
             return -1;
         }
+    }
+    //dừng tiến trình
+    bool SuspendProcess(DWORD pid){
+        HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+        if (hSnapshot == INVALID_HANDLE_VALUE) {
+            cerr << "Failed to create snapshot." << endl;
+            return false;
+        }
+        THREADENTRY32 te;
+        te.dwSize = sizeof(te);
+        if (Thread32First(hSnapshot, &te)) {
+            do {
+                if (te.th32OwnerProcessID == pid) { // Kiểm tra xem thread có thuộc về tiến trình này không
+                    HANDLE hThread = OpenThread(THREAD_SUSPEND_RESUME, FALSE, te.th32ThreadID);
+                    if (hThread) {
+                        SuspendThread(hThread); // Tạm dừng thread
+                        CloseHandle(hThread);
+                    }
+                }
+            } while (Thread32Next(hSnapshot, &te));
+        }
+        CloseHandle(hSnapshot);
+        return true; // Trả về true nếu thành công
+    }
+    //bool tiếp tục tiến trình
+    bool ResumeProcess(DWORD pid) {
+        HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+        if (hSnapshot == INVALID_HANDLE_VALUE) {
+            cerr << "Failed to create snapshot." << endl;
+            return false;
+        }
+        THREADENTRY32 te;
+        te.dwSize = sizeof(te);
+        if (Thread32First(hSnapshot, &te)) {
+            do {
+                if (te.th32OwnerProcessID == pid) { // Kiểm tra xem thread có thuộc về tiến trình này không
+                    HANDLE hThread = OpenThread(THREAD_SUSPEND_RESUME, FALSE, te.th32ThreadID);
+                    if (hThread) {
+                        ResumeThread(hThread); // Tiếp tục thread
+                        CloseHandle(hThread);
+                    }
+                }
+            } while (Thread32Next(hSnapshot, &te));
+        }
+        CloseHandle(hSnapshot);
+        return true; // Trả về true nếu thành công
     }
     //thực thi câu lệnh
     void execute(string input) {
@@ -355,6 +405,76 @@ private:
                         return;
                     }
                 }
+                //nhóm lệnh stop
+                else if ( args[0] == "stop" ){
+                    if ( args.size() != 2 ){
+                        cout << "Usage: stop <index|name>" << endl;
+                        return;
+                    }
+                    int idx = s2i(args[1]);
+                    bool found = false;
+                    DWORD pid = 0;
+                    if (idx != -1  && idx < processes_background.size() ){
+                        pid = processes_background[idx].dwProcessId;                                                
+                        found = true;
+                    } else {
+                        string name = args[1];
+                        for ( int i = 0; i<name_process_background.size(); i++ ){
+                            if ( name_process_background[i] == name ){
+                                pid = processes_background[i].dwProcessId;                                                
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ( !found ) {
+                        cerr << "Process not found! Try 'list'" << endl;
+                        return;
+                    } 
+
+                    if ( SuspendProcess(pid) ){
+                        cout << "Process suspended." << endl;
+                    } else {
+                        cerr << "Failed to suspend process." << endl;
+                    }
+                    return;
+                }
+
+                //nhóm lệnh resume
+                else if ( args[0] == "resume" ){
+                    if ( args.size() != 2 ){
+                        cout << "Usage: resume <index|name>" << endl;
+                        return;
+                    }
+                    int idx = s2i(args[1]);
+                    bool found = false;
+                    DWORD pid = 0;
+                    if (idx != -1  && idx < processes_background.size() ){
+                        pid = processes_background[idx].dwProcessId;                                                
+                        found = true;
+                    } else {
+                        string name = args[1];
+                        for ( int i = 0; i<name_process_background.size(); i++ ){
+                            if ( name_process_background[i] == name ){
+                                pid = processes_background[i].dwProcessId;                                                
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ( !found ) {
+                        cerr << "Process not found! Try 'list'" << endl;
+                        return;
+                    } 
+
+                    if ( ResumeProcess(pid) ){
+                        cout << "Process resumed." << endl;
+                    } else {
+                        cerr << "Failed to resume process." << endl;
+                    }
+                }
             }
         }
         return;
@@ -410,7 +530,7 @@ private:
         for (size_t i = 0; i < processes_background.size(); ++i) {
             if (processes_background[i].dwProcessId == pi->dwProcessId) {
                 processes_background.erase(processes_background.begin() + i);
-                name_process_background.erase(name_process.begin() + i);
+                name_process_background.erase(name_process_background.begin() + i);
                 break;
             }
         }
@@ -425,9 +545,9 @@ public:
     void run() {
         setup();                                                    
         while (running) {
-            cout << "myShell>";
+            cout << "myShell> ";
             string input; 
-            if (cin.fail()) {                                       
+            if (cin.fail()) {                          
                 cin.clear();                                           
                 cin.ignore(INT_MAX, '\n');                              
                 cout << endl;
@@ -459,11 +579,8 @@ BOOL WINAPI CtrlHandler(DWORD ctrlType) {
 }
 
 int main() {
-    string user = "abc";                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-    string key = "123456789";
-    //
-    SetConsoleCtrlHandler(CtrlHandler, TRUE);             //Đăng ký xử lý sự kiện Ctrl+C                                                                                                                                                                                                              key = "123456"; user = "nqd";
-    Shell myShell;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 //cout << "user name: "; cin >> user; cout << "password: "; cin >> key; if (user != "nqd" || key != "123456") while(1) cout << "Maked by NQD & NKDH & HHD" << endl; system("cls");
+    SetConsoleCtrlHandler(CtrlHandler, TRUE);
+    Shell myShell;
     myShell.run();
     cout << "done" << endl;
 }
